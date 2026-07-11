@@ -19,7 +19,7 @@
     "key.converter.schemas.enable": "false",
     "value.converter.schemas.enable": "false",
     "decimal.handling.mode": "string",
-    "time.precision.mode": "connect",
+    "time.precision.mode": "adaptive_time_microseconds",
     "snapshot.mode": "initial",
     "tombstones.on.delete": "false"
   }

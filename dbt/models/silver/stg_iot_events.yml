@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: stg_iot_events
+    description: "Cleaned and parsed IoT events with severity tags"
+    columns:
+      - name: device_id
+        description: "Unique device identifier"
+        tests:
+          - not_null
+      - name: lat
+        description: "Device latitude"
+        tests:
+          - not_null
+      - name: long
+        description: "Device longitude"
+        tests:
+          - not_null
+      - name: temperature
+        description: "Temperature reading in Celsius"
+      - name: aqi
+        description: "Air quality index reading"
+      - name: event_ts
+        description: "Event timestamp in UTC"
+        tests:
+          - not_null
+      - name: aqi_severity
+        description: "AQI severity tag: good / moderate / unhealthy"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["good", "moderate", "unhealthy"]

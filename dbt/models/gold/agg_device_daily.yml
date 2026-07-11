@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: agg_device_daily
+    description: "Daily aggregated metrics per device -- gold layer"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - device_id
+            - event_date
+    columns:
+      - name: device_id
+        description: "Device identifier"
+        tests:
+          - not_null
+      - name: event_date
+        description: "Date of events (UTC)"
+        tests:
+          - not_null
+      - name: event_count
+        description: "Total number of events on that day"
+        tests:
+          - not_null
+      - name: avg_aqi
+        description: "Daily average AQI"
+      - name: max_aqi
+        description: "Daily maximum AQI"
+      - name: min_aqi
+        description: "Daily minimum AQI"
+      - name: avg_temp
+        description: "Daily average temperature (Celsius)"
+      - name: max_temp
+        description: "Daily maximum temperature"
+      - name: min_temp
+        description: "Daily minimum temperature"
+      - name: avg_lat
+        description: "Average latitude of device on that day"
+      - name: avg_long
+        description: "Average longitude of device on that day"
+      - name: unhealthy_count
+        description: "Events where AQI > 150"
+      - name: moderate_count
+        description: "Events where AQI > 100 and <= 150"
+      - name: first_event_ts
+        description: "Timestamp of first event on that day"
+      - name: last_event_ts
+        description: "Timestamp of last event on that day"

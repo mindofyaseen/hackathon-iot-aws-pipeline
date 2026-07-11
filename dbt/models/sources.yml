@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+  - name: raw
+    database: HACKATHON_IOT
+    schema: RAW
+    tables:
+      - name: IOT_EVENTS
+        description: "Raw CDC events from PostgreSQL via Snowflake Kafka Connector"
+        columns:
+          - name: RECORD_CONTENT
+            description: "Debezium CDC envelope as VARIANT"
+          - name: RECORD_METADATA
+            description: "Kafka message metadata as VARIANT"
+          - name: INSERTED_AT
+            description: "Timestamp when record landed in Snowflake"

@@ -1,0 +1,26 @@
+{
+  "name": "debezium-postgres-source",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "tasks.max": "1",
+    "database.hostname": "${PG_HOST}",
+    "database.port": "5432",
+    "database.user": "iot_user",
+    "database.password": "${PG_PASSWORD}",
+    "database.dbname": "iotdb",
+    "database.server.name": "cdc",
+    "topic.prefix": "cdc",
+    "table.include.list": "public.iot_events",
+    "plugin.name": "pgoutput",
+    "slot.name": "debezium_slot",
+    "publication.name": "dbz_publication",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter.schemas.enable": "false",
+    "decimal.handling.mode": "string",
+    "time.precision.mode": "connect",
+    "snapshot.mode": "initial",
+    "tombstones.on.delete": "false"
+  }
+}

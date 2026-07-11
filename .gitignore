@@ -1,0 +1,46 @@
+# CDK
+cdk/cdk.context.json
+cdk/cdk.out/
+cdk/.venv/
+cdk/wheels/
+cdk/__pycache__/
+cdk/**/__pycache__/
+
+# dbt
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+
+# Streamlit
+streamlit/.streamlit/secrets.toml
+
+# Credentials and secrets
+.env
+**/.env
+*.pem
+*.key
+*.p8
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project tracking (internal only)
+progress.md
+claude.md
+
+# dbt internal
+dbt/.user.yml
+dbt/package-lock.yml
+
+# Node (CDK CLI uses node under the hood)
+node_modules/

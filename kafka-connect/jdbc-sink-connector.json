@@ -1,0 +1,23 @@
+{
+  "name": "iot-jdbc-sink",
+  "config": {
+    "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+    "tasks.max": "1",
+    "topics": "iot-events",
+    "connection.url": "jdbc:postgresql://${PG_HOST}:5432/iotdb",
+    "connection.user": "iot_user",
+    "connection.password": "${PG_PASSWORD}",
+    "auto.create": "false",
+    "auto.evolve": "false",
+    "insert.mode": "insert",
+    "table.name.format": "iot_events",
+    "pk.mode": "none",
+    "fields.whitelist": "device_id,lat,long,temperature,aqi,ts",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+    "transforms": "castTs",
+    "transforms.castTs.type": "org.apache.kafka.connect.transforms.ReplaceField$Value",
+    "transforms.castTs.renames": "timestamp:ts"
+  }
+}

@@ -20,6 +20,7 @@ streamlit/.streamlit/secrets.toml
 *.pem
 *.key
 *.p8
+scripts/seed_snowflake.py
 
 # Python
 __pycache__/

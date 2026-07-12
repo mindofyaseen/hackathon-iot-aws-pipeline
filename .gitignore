@@ -21,6 +21,7 @@ streamlit/.streamlit/secrets.toml
 *.key
 *.p8
 scripts/seed_snowflake.py
+scripts/deploy_connectors.py
 
 # Python
 __pycache__/

@@ -27,42 +27,36 @@ def get_connection():
     )
 
 
+def _sql(query):
+    conn = get_connection()
+    df = pd.read_sql(query, conn)
+    conn.close()
+    df.columns = [c.lower() for c in df.columns]
+    return df
+
+
 @st.cache_data(ttl=REFRESH_SECONDS)
 def load_device_map():
-    conn = get_connection()
-    df = pd.read_sql(
-        """
+    return _sql("""
         SELECT device_id, avg_lat AS lat, avg_long AS lon,
                avg_aqi, event_date
         FROM HACKATHON_IOT.ANALYTICS.AGG_DEVICE_DAILY
         WHERE event_date = (SELECT MAX(event_date) FROM HACKATHON_IOT.ANALYTICS.AGG_DEVICE_DAILY)
-        """,
-        conn,
-    )
-    conn.close()
-    return df
+    """)
 
 
 @st.cache_data(ttl=REFRESH_SECONDS)
 def load_aqi_timeseries():
-    conn = get_connection()
-    df = pd.read_sql(
-        """
+    return _sql("""
         SELECT device_id, event_date, avg_aqi
         FROM HACKATHON_IOT.ANALYTICS.AGG_DEVICE_DAILY
         ORDER BY event_date
-        """,
-        conn,
-    )
-    conn.close()
-    return df
+    """)
 
 
 @st.cache_data(ttl=REFRESH_SECONDS)
 def load_top_devices():
-    conn = get_connection()
-    df = pd.read_sql(
-        """
+    return _sql("""
         SELECT device_id,
                SUM(event_count)    AS total_events,
                ROUND(AVG(avg_aqi), 2) AS avg_aqi
@@ -70,11 +64,7 @@ def load_top_devices():
         GROUP BY device_id
         ORDER BY avg_aqi DESC
         LIMIT 10
-        """,
-        conn,
-    )
-    conn.close()
-    return df
+    """)
 
 
 st.title("IoT On-Prem to AWS/Snowflake Pipeline")

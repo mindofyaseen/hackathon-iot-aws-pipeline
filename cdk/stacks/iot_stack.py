@@ -15,25 +15,30 @@ class IotStack(Stack):
         connect_sg = vpc_stack.connect_sg
 
         # IAM role for IoT Core to create VPC network interfaces
+        # Inline policy in constructor so role + policy are one CF resource (avoids IAM propagation race)
         iot_vpc_role = iam.Role(
             self,
             "IotVpcRole",
             assumed_by=iam.ServicePrincipal("iot.amazonaws.com"),
             description="Allows IoT Core to create VPC network interfaces for MSK access",
-        )
-        iot_vpc_role.add_to_policy(
-            iam.PolicyStatement(
-                actions=[
-                    "ec2:CreateNetworkInterface",
-                    "ec2:DescribeNetworkInterfaces",
-                    "ec2:DescribeVpcs",
-                    "ec2:DeleteNetworkInterface",
-                    "ec2:DescribeSubnets",
-                    "ec2:DescribeVpcAttribute",
-                    "ec2:DescribeSecurityGroups",
-                ],
-                resources=["*"],
-            )
+            inline_policies={
+                "IotVpcNetworkPolicy": iam.PolicyDocument(
+                    statements=[
+                        iam.PolicyStatement(
+                            actions=[
+                                "ec2:CreateNetworkInterface",
+                                "ec2:DescribeNetworkInterfaces",
+                                "ec2:DescribeVpcs",
+                                "ec2:DeleteNetworkInterface",
+                                "ec2:DescribeSubnets",
+                                "ec2:DescribeVpcAttribute",
+                                "ec2:DescribeSecurityGroups",
+                            ],
+                            resources=["*"],
+                        )
+                    ]
+                )
+            },
         )
 
         # IoT VPC destination -- lets IoT Core reach MSK in private subnet

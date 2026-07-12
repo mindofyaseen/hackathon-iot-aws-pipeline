@@ -84,16 +84,27 @@ with col1:
     st.subheader("Device Activity Map")
     df_map = load_device_map()
     if not df_map.empty:
+        # Convert to plain Python dicts so pydeck JSON serializer doesn't choke on numpy/Decimal
+        map_records = [
+            {"device_id": str(r["device_id"]), "lat": float(r["lat"]),
+             "lon": float(r["lon"]), "avg_aqi": float(r["avg_aqi"])}
+            for r in df_map.to_dict("records")
+        ]
         layer = pdk.Layer(
             "ScatterplotLayer",
-            data=df_map,
+            data=map_records,
             get_position="[lon, lat]",
             get_color="[200, 30, 0, 160]",
             get_radius=5000,
             pickable=True,
         )
-        view = pdk.ViewState(latitude=df_map["lat"].mean(), longitude=df_map["lon"].mean(), zoom=9)
-        st.pydeck_chart(pdk.Deck(layers=[layer], initial_view_state=view, tooltip={"text": "{device_id}\nAQI: {avg_aqi}"}))
+        view = pdk.ViewState(
+            latitude=float(df_map["lat"].mean()),
+            longitude=float(df_map["lon"].mean()),
+            zoom=9,
+        )
+        st.pydeck_chart(pdk.Deck(layers=[layer], initial_view_state=view,
+                                  tooltip={"text": "{device_id}\nAQI: {avg_aqi}"}))
     else:
         st.info("No device location data yet.")
 

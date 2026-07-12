@@ -32,6 +32,14 @@ def _sql(query):
     df = pd.read_sql(query, conn)
     conn.close()
     df.columns = [c.lower() for c in df.columns]
+    # Cast non-string columns to native Python float (Snowflake returns Decimal)
+    for col in df.columns:
+        if col in ("device_id", "event_date"):
+            continue
+        try:
+            df[col] = df[col].astype(float)
+        except Exception:
+            pass
     return df
 
 
